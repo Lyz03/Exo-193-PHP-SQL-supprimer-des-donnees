@@ -10,3 +10,45 @@
  *    --> Finalement, vous décidez de supprimer complètement la table
  *    --> Et pour finir, comme vous n'avez plus de table dans la base de données, vous décidez de supprimer aussi la base de données.
  */
+
+require __DIR__ . '/Classes/DB.php';
+
+$db = new DB();
+$db= $db->getInstance();
+
+$sql = "DELETE FROM user WHERE id = 4";
+$db->exec($sql);
+
+$sql = "TRUNCATE TABLE user";
+$db->exec($sql);
+
+$name = 'nom';
+$firstName = 'prenom';
+$address = 'rue';
+$number = 10;
+$zip_code = 10101;
+$city = 'ville';
+$country = 'pays';
+$email = 'email';
+
+$stmt = $db->prepare("
+        INSERT INTO user (nom, prenom, rue, numero, code_postal, ville, pays, mail)
+        VALUES (:name, :firstName, :address, :number, :zip_code, :city, :country, :email)    
+    ");
+
+$stmt->bindParam('name', $name);
+$stmt->bindParam('firstName', $firstName);
+$stmt->bindParam('address', $address);
+$stmt->bindParam('number', $number);
+$stmt->bindParam('zip_code', $zip_code);
+$stmt->bindParam('city', $city);
+$stmt->bindParam('country', $country);
+$stmt->bindParam('email', $email);
+
+$result = $stmt->execute();
+
+$sql = "DROP TABLE user";
+$db->exec($sql);
+
+$sql = "DROP DATABASE bdd_cours";
+$db->exec($sql);
